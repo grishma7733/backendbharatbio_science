@@ -7,21 +7,25 @@ const fs = require('fs');
 require('dotenv').config();
 
 const app = express();
-const localIP = "192.168.1.8";
+const DEPLOYED_FRONTEND_URL = "https://bharatbioscience.com"; 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/view/product', express.static(path.join(__dirname, 'public')));
 
 
 
-app.use(cors());
+app.use(cors({
+    origin: DEPLOYED_FRONTEND_URL,
+    methods: ["GET"],
+    allowedHeaders: ["Content-Type"]
+}));
+
 app.use(express.json());
 
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
-    next();
-});
+app.use(cors({
+    origin: process.env.FRONTEND_URL, 
+    credentials: true
+}));
+
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname + '/public/index.html'));
@@ -29,16 +33,14 @@ app.get('/', (req, res) => {
 
 
 
-app.use((req, res, next) => {
-    res.setHeader("Content-Security-Policy", 
-        "default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; " +
-        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
-        "script-src 'self'; " +
-        "img-src 'self' data: https:; " +
-        "connect-src 'self' http://localhost:4000 http://192.168.1.8:4000"
-    );
-    next();
-});
+res.setHeader("Content-Security-Policy", 
+    `default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; 
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
+    script-src 'self'; 
+    img-src 'self' data: https:; 
+    connect-src 'self' ${process.env.FRONTEND_URL} ${process.env.BACKEND_URL};`
+);
+
 
 const apiRouter = express.Router();
 
@@ -53,7 +55,10 @@ const pool = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASS,
-    database: process.env.DB_NAME
+    database: process.env.DB_NAME,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
 }).promise();
 
 // ✅ Check if the database is connected
@@ -140,7 +145,8 @@ app.get("/api/product/:id", async (req, res) => {
 // ✅ Fixed QR Code Generation
 app.get('/generate-qr/:id/save', async (req, res) => {
     const { id } = req.params;
-    const qrUrl = `http://${localIP}:4000/view/product/${id}`;
+    const qrUrl = `https://bharatbioscience.com/view/product/${id}`; // Replace with your Vercel frontend URL
+
 
     try {
         const qrCode = await QRCode.toDataURL(qrUrl);
