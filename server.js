@@ -129,25 +129,22 @@ app.get("/api/product/:id", async (req, res) => {
 });
 
 
-    app.get("/view/product/:id", (req, res) => {
-        const filePath = path.join(__dirname, "public", "index.html");
-    
-        console.log(`[LOG] Serving product page for ID: ${req.params.id}`);
-        console.log(`[DEBUG] Looking for file at: ${filePath}`);
-    
-        res.sendFile(filePath, (err) => {
-            if (err) {
-                console.error("[ERROR] Failed to serve product.html:", err);
-                res.status(500).send(`Error loading product page: ${err.message}`);
-            }
-        });
-    });
+const FRONTEND_URL = "https://bharatbioscience.vercel.app"; // Change this to your actual Vercel frontend URL
+
+app.get("/view/product/:id", (req, res) => {
+    const productId = req.params.id;
+    const productPageUrl = `${FRONTEND_URL}/view/product/${productId}`;
+
+    console.log(`[LOG] Redirecting to: ${productPageUrl}`);
+    res.redirect(productPageUrl);
+});
+
     
 
 // ✅ Fixed QR Code Generation
 app.get('/generate-qr/:id/save', async (req, res) => {
     const { id } = req.params;
-    const qrUrl = `https://bharatbioscience.com/view/product/${id}`; // Replace with your Vercel frontend URL
+    const qrUrl = `${FRONTEND_URL}/index.html?id=${id}`; // Replace with your Vercel frontend URL
 
 
     try {
