@@ -31,15 +31,16 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname + '/public/index.html'));
 });
 
-
-
-res.setHeader("Content-Security-Policy", 
-    `default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; 
-    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
-    script-src 'self'; 
-    img-src 'self' data: https:; 
-    connect-src 'self' ${process.env.FRONTEND_URL} ${process.env.BACKEND_URL};`
-);
+app.use((req, res, next) => {
+    res.setHeader("Content-Security-Policy", 
+        `default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; 
+        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
+        script-src 'self'; 
+        img-src 'self' data: https:; 
+        connect-src 'self' ${process.env.FRONTEND_URL} ${process.env.BACKEND_URL};`
+    );
+    next();
+});
 
 
 const apiRouter = express.Router();
@@ -168,4 +169,4 @@ app.get('/generate-qr/:id/save', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, '0.0.0.0', () => console.log(`Server running on port http://${localIP}:${PORT}`));
+app.listen(PORT, '0.0.0.0', () => console.log(`Server running on port ${PORT}`));
