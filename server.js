@@ -33,14 +33,15 @@ app.get('/', (req, res) => {
 
 app.use((req, res, next) => {
     res.setHeader("Content-Security-Policy", 
-        `default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; 
-        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
-        script-src 'self'; 
-        img-src 'self' data: https:; 
-        connect-src 'self' ${process.env.FRONTEND_URL} ${process.env.BACKEND_URL};`
+        "default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; " +
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+        "script-src 'self'; " +
+        "img-src 'self' data: https:; " +
+        `connect-src 'self' ${process.env.FRONTEND_URL} ${process.env.BACKEND_URL};`
     );
     next();
 });
+
 
 
 const apiRouter = express.Router();
