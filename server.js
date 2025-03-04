@@ -28,9 +28,9 @@ app.use(cors({
 }));
 
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname + './frontend/index.html'));
-});
+// app.get('/', (req, res) => {
+//     res.sendFile(path.join(__dirname + './frontend/index.html'));
+// });
 
 app.use((req, res, next) => {
     res.setHeader("Content-Security-Policy", 
