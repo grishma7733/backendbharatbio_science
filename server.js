@@ -48,6 +48,8 @@ app.use((req, res, next) => {
 const apiRouter = express.Router();
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/qrcodes', express.static('qrcodes'));
+
 
 app.get("/", (req, res) => {
     res.send("Server is running! QR Code API is working.");
