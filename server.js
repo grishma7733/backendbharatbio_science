@@ -151,9 +151,9 @@ app.get("/view/product/:id", async (req, res) => {
 
 // ✅ Fixed QR Code Generation
 app.get('/generate-qr/:id/save', async (req, res) => {
-    const { id } = req.params;
+    const {_id } = req.params;
     console.log("ID:",id);
-    const qrUrl = `https://bharatbio-science.vercel.app/view/product/${id}`; // Replace with your Vercel frontend URL
+    const qrUrl = `https://bharatbio-science.vercel.app/view/product/${_id}`; // Replace with your Vercel frontend URL
 
 
     try {
@@ -162,7 +162,7 @@ app.get('/generate-qr/:id/save', async (req, res) => {
 
         if (!fs.existsSync(qrCodesDir)) fs.mkdirSync(qrCodesDir, { recursive: true });
 
-        const filePath = path.join(qrCodesDir, `qrcode_${id}.png`);
+        const filePath = path.join(qrCodesDir, `qrcode_${_id}.png`);
         const base64Data = qrCode.replace(/^data:image\/png;base64,/, "");
         fs.writeFileSync(filePath, base64Data, 'base64');
 
