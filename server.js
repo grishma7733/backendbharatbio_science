@@ -63,7 +63,7 @@ client.connect()
   .then(() => console.log('Connected to Supabase Database'))
   .catch(err => console.error('Connection error', err.stack));
   
-    app.get("/api/product/:id", async (req, res) => {
+    app.get("/api/product/id", async (req, res) => {
         const { id } = req.params;
         console.log(`[LOG] Received request for product ID: ${id}`);
         
@@ -103,7 +103,7 @@ client.connect()
     });
 
     // ✅ API to fetch product data as JSON
-app.get("/view/product/:id", async (req, res) => {
+app.get("/view/product/id", async (req, res) => {
     const { id } = req.params;
     console.log(`[LOG] Received request for product ID: ${id}`);
 
@@ -127,7 +127,7 @@ app.get("/view/product/:id", async (req, res) => {
 
 const FRONTEND_URL = "https://bharatbio-science.vercel.app"; // Change this to your actual Vercel frontend URL
 
-app.get("/view/product/:id", (req, res) => {
+app.get("/view/product/id", (req, res) => {
     const productId = req.params.id;
     const productPageUrl = `${FRONTEND_URL}/view/product/${productId}`;
 
@@ -138,7 +138,7 @@ app.get("/view/product/:id", (req, res) => {
     
 
 // ✅ Fixed QR Code Generation
-app.get('/generate-qr/:id/save', async (req, res) => {
+app.get('/generate-qr/id/save', async (req, res) => {
     const { id } = req.params;
     const qrUrl = `https://bharatbio-science.vercel.app/view/product/${id}`; // Replace with your Vercel frontend URL
 
