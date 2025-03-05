@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(cors({
     origin: process.env.FRONTEND_URL||DEPLOYED_FRONTEND_URL, 
     credentials: true,
-    // methods: ["GET"],
+    methods: ["GET"],
     allowedHeaders: ["Content-Type"]
 }));
 
@@ -140,7 +140,7 @@ app.get("/view/product/:id", (req, res) => {
 // ✅ Fixed QR Code Generation
 app.get('/generate-qr/:id/save', async (req, res) => {
     const { id } = req.params;
-    const qrUrl = `${FRONTEND_URL}/view/product/${id}`; // Replace with your Vercel frontend URL
+    const qrUrl = `https://bharatbio-science.vercel.app/view/product/${id}`; // Replace with your Vercel frontend URL
 
 
     try {
