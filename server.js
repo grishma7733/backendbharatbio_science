@@ -151,10 +151,8 @@ app.get("/view/product/:id", async (req, res) => {
 
 // ✅ Fixed QR Code Generation
 app.get('/generate-qr/:id/save', async (req, res) => {
-    const {id } = req.params;
-    console.log("ID:",id);
+    const { id } = req.params;
     const qrUrl = `https://bharatbio-science.vercel.app/view/product/${id}`; // Replace with your Vercel frontend URL
-
 
     try {
         const qrCode = await QRCode.toDataURL(qrUrl);
@@ -162,7 +160,7 @@ app.get('/generate-qr/:id/save', async (req, res) => {
 
         if (!fs.existsSync(qrCodesDir)) fs.mkdirSync(qrCodesDir, { recursive: true });
 
-        const filePath = path.join(qrCodesDir, `qrcode_${_id}.png`);
+        const filePath = path.join(qrCodesDir, `qrcode_${id}.png`);
         const base64Data = qrCode.replace(/^data:image\/png;base64,/, "");
         fs.writeFileSync(filePath, base64Data, 'base64');
 
@@ -174,6 +172,7 @@ app.get('/generate-qr/:id/save', async (req, res) => {
         res.status(500).json({ error: `QR Code generation failed: ${err.message}` });
     }
 });
+
 
 const PORT = process.env.PORT || 3998;
 app.listen(PORT, '0.0.0.0', () => console.log(`Server running on port ${PORT}`));
