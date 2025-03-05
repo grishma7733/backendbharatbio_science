@@ -12,19 +12,13 @@ const DEPLOYED_FRONTEND_URL = "https://bharatbio-science.vercel.app";
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/view/product', express.static(path.join(__dirname, 'public')));
 
-
-
-app.use(cors({
-    origin: DEPLOYED_FRONTEND_URL,
-    methods: ["GET"],
-    allowedHeaders: ["Content-Type"]
-}));
-
 app.use(express.json());
 
 app.use(cors({
-    origin: process.env.FRONTEND_URL, 
-    credentials: true
+    origin: process.env.FRONTEND_URL||DEPLOYED_FRONTEND_URL, 
+    credentials: true,
+    methods: ["GET"],
+    allowedHeaders: ["Content-Type"]
 }));
 
 
@@ -114,11 +108,12 @@ app.get("/view/product/:id", async (req, res) => {
     console.log(`[LOG] Received request for product ID: ${id}`);
 
     try {
-        const [rows] = await pool.query("SELECT * FROM product_details WHERE id = ?", [id]);
+        const result = await client.query("SELECT * FROM product_details WHERE id = $1", [id]);
+        const rows = result.rows;
 
-        if (!rows || rows.length === 0) {
-            return res.status(404).json({ error: "Product not found" });
-        }
+    if (!rows || rows.length === 0) {
+        return res.status(404).json({ error: "Product not found" });
+    }
 
         console.log("[LOG] Sending product data:", rows[0]);
         res.json(rows[0]);
