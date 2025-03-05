@@ -152,6 +152,7 @@ app.get("/view/product/:id", async (req, res) => {
 // ✅ Fixed QR Code Generation
 app.get('/generate-qr/:id/save', async (req, res) => {
     const { id } = req.params;
+    console.log("ID:",id);
     const qrUrl = `https://bharatbio-science.vercel.app/view/product/${id}`; // Replace with your Vercel frontend URL
 
 
