@@ -84,9 +84,7 @@ app.get("/view/product/:id", async (req, res) => {
     console.log(`[LOG] Received request for product ID: ${id}`);
 
     try {
-        const query = "SELECT * FROM product_details WHERE id = $1";
-        console.log(`[LOG] Executing query: ${query} with id: ${id}`);
-        const result = await client.query(query, [id]);
+        const result = await client.query("SELECT * FROM product_details WHERE id = $1", [id]);
         const rows = result.rows;
 
         if (!rows || rows.length === 0) {
