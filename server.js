@@ -11,6 +11,10 @@ const app = express();
 const FRONTEND_URL = process.env.FRONTEND_URL || "https://bharatbio-science.vercel.app";
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use("/api", require("./routes/apiRoutes"));
+
+
+
 app.use(express.json());
 
 app.use(cors({
@@ -107,7 +111,7 @@ app.get("/view/product/:id", async (req, res) => {
     }
 });
 
-app.get('/generate-qr/:id/save', async (req, res) => {
+app.get('/api/generate-qr/:id/save', async (req, res) => {
     const { id } = req.params;
     const qrUrl = `${FRONTEND_URL}/view/product/${id}`;
 
@@ -128,6 +132,10 @@ app.get('/generate-qr/:id/save', async (req, res) => {
         console.error("[ERROR] QR Code Generation Failed:", err.message);
         res.status(500).json({ error: `QR Code generation failed: ${err.message}` });
     }
+});
+
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 const PORT = process.env.PORT || 3998;
