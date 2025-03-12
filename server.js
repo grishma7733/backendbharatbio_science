@@ -115,7 +115,7 @@ app.get("/view/product/:id", async (req, res) => {
 
 app.get('/api/generate-qr/:id/save', async (req, res) => {
     const { id } = req.params;
-    const qrUrl = `${FRONTEND_URL}/api/product/${id}`;
+    const qrUrl = `${FRONTEND_URL}/view/product/${id}`;
 
     try {
         const qrCode = await QRCode.toDataURL(qrUrl);
