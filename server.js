@@ -58,7 +58,7 @@ client.connect()
 
     app.get("/api/product/:productName", async (req, res) => {
         const { productName } = req.params;
-        const decodedName = decodeURIComponent(productName);
+        const decodedName = decodeURIComponent(productName).trim();
         console.log(`[LOG] Received request for product name: ${decodedName}`);
     
         try {
@@ -105,7 +105,7 @@ client.connect()
         console.log(`[LOG] Decoded productName: ${decodedName}`);
     
         try {
-            const result = await client.query("SELECT * FROM product_details WHERE product_name = $1", [decodedName]);
+            const result = await client.query("SELECT * FROM product_details WHERE LOWER(product_name) = LOWER($1)", [decodedName]);
             const rows = result.rows;
     
             if (!rows || rows.length === 0) {
@@ -126,7 +126,7 @@ client.connect()
         let { productName } = req.params;
         
         // ✅ Remove invalid characters (like `:`) and replace spaces with `_`
-        const safeProductName = productName.replace(/^:/, ""); // Remove leading colon if present
+        const safeProductName = decodeURIComponent(productName).trim().replace(/\s+/g, "_"); // Remove leading colon if present
         const qrUrl = `${FRONTEND_URL}/view/product/${encodeURIComponent(safeProductName)}`;
     
         try {
@@ -140,7 +140,8 @@ client.connect()
             fs.writeFileSync(filePath, base64Data, 'base64');
     
             console.log("[LOG] QR Code saved at:", filePath);
-            res.json({ message: "QR Code saved!", file: `/qrcodes/qrcode_${safeProductName}.png` });
+            const fileUrl = `${process.env.BACKEND_URL}/qrcodes/qrcode_${safeProductName}.png`;
+            res.json({ message: "QR Code saved!", file: fileUrl });
     
         } catch (err) {
             console.error("[ERROR] QR Code Generation Failed:", err.message);
