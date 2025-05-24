@@ -87,6 +87,9 @@ client.connect()
                 console.log("[LOG] Product not found in database.");
                 return res.status(404).json({ error: "Product not found" });
             }
+
+            console.log("[DEBUG] Raw DB row:", product);
+
     
             const product = rows[0];
             const response = {
