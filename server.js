@@ -64,9 +64,7 @@ const client = new Client({
 
 app.get("/debug/products", async (req, res) => {
     try {
-        const result = await client.query(
-            "SELECT product_name WHERE table_name = 'product_details';"
-        );
+        const result = await client.query("SELECT product_name FROM product_details;");
         res.json({ columns: result.rows });
     } catch (err) {
         console.error("[DEBUG] Error fetching columns:", err);
