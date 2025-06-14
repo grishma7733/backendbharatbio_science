@@ -62,6 +62,19 @@ const client = new Client({
 //     ssl: { rejectUnauthorized: false } // Required for Supabase
 // });
 
+app.get("/debug/columns", async (req, res) => {
+    try {
+        const result = await client.query(
+            "SELECT column_name FROM information_schema.columns WHERE table_name = 'product_details';"
+        );
+        res.json({ columns: result.rows });
+    } catch (err) {
+        console.error("[DEBUG] Error fetching columns:", err);
+        res.status(500).json({ error: "Failed to fetch columns" });
+    }
+});
+
+
 client.connect()
     .then(() => console.log('Connected to Supabase Database'))
     .catch(err => console.error('Connection error', err.stack));
