@@ -62,10 +62,10 @@ const client = new Client({
 //     ssl: { rejectUnauthorized: false } // Required for Supabase
 // });
 
-app.get("/debug/columns", async (req, res) => {
+app.get("/debug/products", async (req, res) => {
     try {
         const result = await client.query(
-            "SELECT column_name FROM information_schema.columns WHERE table_name = 'product_details';"
+            "SELECT product_name WHERE table_name = 'product_details';"
         );
         res.json({ columns: result.rows });
     } catch (err) {
