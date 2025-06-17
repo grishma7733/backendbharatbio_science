@@ -99,10 +99,12 @@ app.get("/api/product/:productName", async (req, res) => {
                 return res.status(404).json({ error: "Product not found" });
             }
 
+
+            const product = rows[0];
             console.log("[DEBUG] Raw DB row:", product);
 
     
-            const product = rows[0];
+           
             const response = {
                 product_name: product.product_name,
                 product_image_url: product.product_image_url,
