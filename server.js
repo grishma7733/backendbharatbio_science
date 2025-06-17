@@ -77,7 +77,7 @@ client.connect()
     .then(() => console.log('Connected to Supabase Database'))
     .catch(err => console.error('Connection error', err.stack));
 
-    app.get("/api/product/:productName", async (req, res) => {
+app.get("/api/product/:productName", async (req, res) => {
         const { productName } = req.params;
         const decodedName = decodeURIComponent(productName).trim();
 
